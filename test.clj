@@ -10,24 +10,24 @@
 
 (defn base!
   [sb base-key base-val]
-  (send sb (fn->
-    (assoc base-key base-val)
-    (vary-meta update :sent-keys
-      #(conj % base-key)))))
+  (when-not ((comp result :sent-keys)
+      (meta @sb))
+    (send sb (fn->
+      (assoc base-key base-val)
+      (vary-meta update :sent-keys
+        #(conj % base-key))))))
 
 (defn step!
   [sb result needed-keys func]
-  (let [
-        uses (map @sb needed-keys)]
-    (when (and
-        (every? identity ((juxt :snowball
-            (comp not result :sent-keys)
-            (constantly uses))
-          (meta @sb))))
-      (send sb (fn->
-        (assoc result (apply func uses))
-        (vary-meta update :sent-keys
-          #(conj % result)))))))
+  (when-not ((comp result :sent-keys)
+      (meta @sb))
+    (let [
+          uses (map @sb needed-keys)]
+      (when (every? identity uses)
+        (send sb (fn->
+          (assoc result (apply func uses))
+          (vary-meta update :sent-keys
+            #(conj % result))))))))
 
 ;;TEST
 
