@@ -1,6 +1,6 @@
 (defmacro fn->
   [& args]
-  `(fn [x] (-> x ~@args)))
+  `(fn [x#] (-> x# ~@args)))
 
 (defn snowball
   []
