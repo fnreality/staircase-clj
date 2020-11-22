@@ -38,7 +38,7 @@
 
 (defmacro until!
   [sb result paths*]
-  `(println (partition 5 ~paths*)))
+  `(println (partition 5 paths*)))
 
 ;;TEST
 
