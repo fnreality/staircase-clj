@@ -22,7 +22,7 @@
 
 (defn base!
   [sb base-key base-val]
-  (when-> sb (key-sent? base-key)
+  (when-not-> sb (key-sent? base-key)
     (send (fn->
       (assoc base-key base-val)
       (vary-meta update :sent-keys
@@ -33,7 +33,7 @@
   (let [
         uses (map @sb needed-keys)]
     (when (every? identity uses)
-      (when-> sb (key-sent? result)
+      (when-not-> sb (key-sent? result)
         (send (fn->
           (assoc result (apply func uses))
           (vary-meta update :sent-keys
