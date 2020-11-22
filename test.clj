@@ -6,10 +6,6 @@
   [basis pred & args]
   `(when-not (~pred ~basis) (-> ~basis ~@args)))
 
-(defmacro when-not->
-  [basis pred & args]
-  `(when-> ~basis (complement ~pred) ~@args))
-
 (defn snowball
   []
   (agent (with-meta {} {
@@ -22,7 +18,7 @@
 
 (defn base!
   [sb base-key base-val]
-  (when-not-> sb (key-sent? base-key)
+  (when-> sb (key-sent? base-key)
     (send (fn->
       (assoc base-key base-val)
       (vary-meta update :sent-keys
@@ -33,7 +29,7 @@
   (let [
         uses (map @sb needed-keys)]
     (when (every? identity uses)
-      (when-not-> sb (key-sent? result)
+      (when-> sb (key-sent? result)
         (send (fn->
           (assoc result (apply func uses))
           (vary-meta update :sent-keys
