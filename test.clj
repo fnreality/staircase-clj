@@ -1,3 +1,8 @@
+(defmacro fn->
+  [& args]
+  `(fn [through-fn->]
+    (-> through-fn-> ~@args))
+
 (defn snowball
   []
   (agent (with-meta {} {
@@ -6,10 +11,10 @@
 
 (defn base!
   [sb base-key base-val]
-  (send sb #(-> %
+  (send sb (fn->
     (assoc base-key base-val)
     (vary-meta update-in :sent-keys
-      #(conj % result)))))
+      #(conj % base-key)))))
 
 (defn step!
   [sb result needed-keys func]
@@ -20,7 +25,7 @@
             (comp not result :sent-keys)
             (constantly uses))
           (meta @sb))))
-      (send sb #(-> %
+      (send sb (fn->
         (assoc result (apply func uses))
         (vary-meta update-in :sent-keys
           #(conj % result)))))))
