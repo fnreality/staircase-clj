@@ -34,16 +34,18 @@
           (assoc result (apply func uses))
           (vary-meta update :sent-keys
             #(conj % result))))))))
-
-;; TEST
+;;TEST
 
 (def sb (snowball))
 
-(println (meta @sb))
-(base! sb :a 42)
-(println (meta @sb))
-(Thread/sleep 1000)
-(println (meta @sb))
+(while
+    ((complement :result) @sb)
+  (base! sb :a 10)
+  (base! sb :b 42)
+  (step! sb :sum
+    [:a :b] +)
+  (step! sb :result
+    [:sum] dec))
 
 (println @sb)
 
