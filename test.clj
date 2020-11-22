@@ -32,7 +32,8 @@
   (let [
          steps* (map (fn
             [[target '<- func '<- needed-keys]]
-            `(step! ~sb ~target ~needed-keys ~func)))]
+            `(step! ~sb ~target ~needed-keys ~func))
+          (partition 5 paths*))]
     `(while ((comp not result deref) ~sb) ~@steps*)))
 
 ;;TEST
