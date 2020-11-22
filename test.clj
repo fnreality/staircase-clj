@@ -27,18 +27,23 @@
           (vary-meta update :sent-keys
             #(conj % result))))))))
 
+(defmacro until!
+  [sb result paths*]
+  (let [
+         steps* (map (fn
+            [[target '<- func '<- needed-keys]]
+            `(step! ~sb ~target ~needed-keys ~func)))]
+    `(while ((comp not result deref) ~sb) ~@steps*)))
+
 ;;TEST
 
 (def sb (snowball {
                     :a 10
                     :b 42}))
 
-(while
-    ((complement :result) @sb)
-  (step! sb :sum
-    [:a :b] +)
-  (step! sb :result
-    [:sum] dec))
+(until! sb :result [
+                     :sum <- + <- [:a :b]
+                     :result <- dec <- [:sum]])
 
 (println @sb)
 
