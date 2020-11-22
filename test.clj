@@ -10,7 +10,7 @@
 
 (defn base!
   [sb base-key base-val]
-  (when-not ((comp result :sent-keys)
+  (when-not ((comp base-key :sent-keys)
       (meta @sb))
     (send sb (fn->
       (assoc base-key base-val)
