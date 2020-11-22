@@ -27,7 +27,7 @@
           (vary-meta update :sent-keys
             #(conj % result))))))))
 
-(defmacro until!
+#_(defmacro until!
   [sb result paths*]
   (let [
          steps* (map (fn
@@ -35,6 +35,10 @@
             `(step! ~sb ~target ~needed-keys ~func))
           (partition 5 paths*))]
     `(while ((comp not result deref) ~sb) ~@steps*)))
+
+(defmacro until!
+  [sb result paths*]
+  `(println (partition 5 ~paths*)))
 
 ;;TEST
 
