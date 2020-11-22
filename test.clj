@@ -1,29 +1,23 @@
 (defn snowball
   []
-  (agent {} :meta {
-                    :snowball true
-                    :sent-keys #{}}))
+  (agent (with-meta {} {
+                        :snowball true
+                        :sent-keys #{}}))
 
 (defn base!
-  [var-quoted base-key base-val]
-  (send @var-quoted
+  [sb base-key base-val]
+  (send sb
     #(assoc % base-key base-val)))
 
 (defn step!
-  [var-quoted result needed-keys func]
-  (when
+  [sb result needed-keys func]
+  (when-not (@sb result)
     (let [
-          uses (map @@var-quoted needed-keys)]
-      (when (and
-        (every? identity uses)
-        (:snowball (meta var-quoted))
-        ((comp not result :sent-keys)
-          (meta var-quoted)))
-        (send @var-quoted
+          uses (map @sb needed-keys)]
+      (when (every? identity uses)
+        (send sb
           #(assoc % result
-            (apply func uses)))
-        (alter-meta! var-quoted :sent-keys
-          #(conj % result))))))
+            (apply func uses)))))))
 
 ;;TEST
 
@@ -31,11 +25,11 @@
 
 (while
     ((complement :result) @sb)
-  (base! #'sb :a 10)
-  (base! #'sb :b 42)
-  (step! #'sb :sum
+  (base! sb :a 10)
+  (base! sb :b 42)
+  (step! sb :sum
     [:a :b] +)
-  (step! #'sb :result
+  (step! sb :result
     [:sum] dec))
 
 (println @sb)
