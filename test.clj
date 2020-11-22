@@ -39,9 +39,18 @@
           (vary-meta update :sent-keys
             #(conj % result))))))))
 
-;;TEST
+;; TEST
 
 (def sb (snowball))
+
+(println (macroexpand
+  '(when-not-> sb (key-sent? :base-key)
+    (send (fn->
+      (assoc :base-key :base-val)
+      (vary-meta update :sent-keys
+        #(conj % :base-key)))))))
+
+#_(comment
 
 (while
     ((complement :result) @sb)
@@ -58,5 +67,7 @@
                 :a 10 :b 42
                 :sum 52
                 :result 51}))
+
+)
 
 (shutdown-agents)
