@@ -43,23 +43,11 @@
 
 (def sb (snowball))
 
-(println (macroexpand
-  '(when-not-> sb (key-sent? :base-key)
-    (send (fn->
-      (assoc :base-key :base-val)
-      (vary-meta update :sent-keys
-        #(conj % :base-key)))))))
-
-#_(comment
-
-(while
-    ((complement :result) @sb)
-  (base! sb :a 10)
-  (base! sb :b 42)
-  (step! sb :sum
-    [:a :b] +)
-  (step! sb :result
-    [:sum] dec))
+(println (meta @sb))
+(base! sb :a 42)
+(println (meta @sb))
+(Thread/sleep 1000)
+(println (meta @sb))
 
 (println @sb)
 
@@ -67,7 +55,5 @@
                 :a 10 :b 42
                 :sum 52
                 :result 51}))
-
-)
 
 (shutdown-agents)
