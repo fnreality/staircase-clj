@@ -1,19 +1,27 @@
 (defn snowball
   []
-  (agent {}))
+  (agent {} :meta {
+                    :snowball true
+                    :sent-keys #{}}))
 
 (defn base!
-  [sb base-key base-val]
-  (send sb
+  [var-quoted base-key base-val]
+  (send @var-quoted
     #(assoc % base-key base-val)))
 
 (defn step!
-  [sb result needed-keys func]
-  (when-not (@sb result)
+  [var-quoted result needed-keys func]
+  (when
     (let [
-          uses (map @sb needed-keys)]
-      (when (every? identity uses)
-        (send sb
+          uses (map @@var-quoted needed-keys)]
+      (when (and
+        (every? identity uses)
+        (:snowball (meta var-quoted))
+        ((comp not result :sent-keys)
+          (meta var-quoted)))
+        (send @var-quoted
           #(assoc % result
-            (apply func uses)))))))
+            (apply func uses)))
+        (alter-meta! var-quoted :sent-keys
+          #(conj % result))))))
 
