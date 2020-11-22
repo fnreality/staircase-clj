@@ -4,7 +4,11 @@
 
 (defmacro when->
   [basis pred & args]
-  `(when-not (~pred ~basis) (-> ~basis ~@args)))
+  `(when (~pred ~basis) (-> ~basis ~@args)))
+
+(defmacro when-not->
+  [basis pred & args]
+  `(when-> ~basis (complement ~pred) ~@args))
 
 (defn snowball
   []
@@ -34,6 +38,7 @@
           (assoc result (apply func uses))
           (vary-meta update :sent-keys
             #(conj % result))))))))
+
 ;;TEST
 
 (def sb (snowball))
