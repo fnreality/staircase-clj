@@ -12,7 +12,7 @@
   [sb base-key base-val]
   (send sb (fn->
     (assoc base-key base-val)
-    (vary-meta update-in :sent-keys
+    (vary-meta update :sent-keys
       #(conj % base-key)))))
 
 (defn step!
@@ -26,7 +26,7 @@
           (meta @sb))))
       (send sb (fn->
         (assoc result (apply func uses))
-        (vary-meta update-in :sent-keys
+        (vary-meta update :sent-keys
           #(conj % result)))))))
 
 ;;TEST
