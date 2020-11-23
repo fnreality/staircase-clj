@@ -40,7 +40,7 @@
   [sb result paths*]
   (let [
          ptd* (partition 5 paths*)]
-    `(println (quote ~ptd*)))))
+    `(println (quote ~ptd*))))
 
 ;;TEST
 
