@@ -34,7 +34,8 @@
             [[target '<- func '<- needed-keys]]
             `(step! ~sb ~target ~needed-keys ~func))
           (partition 5 paths*))]
-    `(while ((comp not result deref) ~sb) ~@steps*)))
+    `(println (quote ~steps*))))
+    #_(while ((comp not result deref) ~sb) ~@steps*)))
 
 (defmacro until!
   [sb result paths*]
