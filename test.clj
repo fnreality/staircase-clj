@@ -31,7 +31,7 @@
   [sb result paths*]
   (let [
          steps* (map (fn
-            [[target '<- func '<- needed-keys]]
+            [[target _ func _ needed-keys]]
             `(step! ~sb ~target ~needed-keys ~func))
           (partition 5 paths*))]
     `(println (quote ~steps*))
