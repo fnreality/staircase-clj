@@ -34,7 +34,7 @@
             [[target _ func _ needed-keys]]
             `(step! ~sb ~target ~needed-keys ~func))
           (partition 5 paths*))]
-    (while ((comp not result deref) ~sb) ~@steps*)))
+    `(while ((comp not result deref) ~sb) ~@steps*)))
 
 ;;TEST
 
