@@ -32,4 +32,5 @@
          steps* (map (fn [[target _ func _ needed-keys]]
             `(step! ~sb ~target ~needed-keys ~func))
           (partition 5 paths*))]
-    `(while ((comp not (key-sent? ~result) deref) ~sb) ~@steps*)))
+    `(while ((complement (key-sent? ~result)) ~sb) ~@steps*)))
+
