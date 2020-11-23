@@ -46,7 +46,7 @@
 
 (println "Formed, awaiting...")
 
-(while (@sb :result))
+#_(while (@sb :result))
 
 (println @sb)
 
