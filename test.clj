@@ -44,6 +44,8 @@
                     :sum <- + <- [:a :b]
                     :result <- dec <- [:sum]])
 
+(println "Formed, awaiting...")
+
 (while (@sb :result))
 
 (println @sb)
