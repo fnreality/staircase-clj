@@ -26,7 +26,13 @@
           (vary-meta update :sent-keys
             #(conj % result))))))))
 
-(defmacro form!
+(defn try!
+  [sb]
+  (map (partial apply step! sb)
+    (comp :paths meta) sb)))
+
+
+(defmacro path!
   [sb result paths*]
   (let [
          steps* (map (fn [[target _ func _ needed-keys]]
@@ -38,15 +44,12 @@
 
 (def sb (snowball {
                     :a 10
-                    :b 42}))
-
-(form! sb :result [
+                    :b 42}
+                  [
                     :sum <- + <- [:a :b]
-                    :result <- dec <- [:sum]])
+                    :result <- dec <- :sum]))
 
-(println "Formed, awaiting...")
-
-(while ((complement @sb) :result))
+(while ((complement @sb) :result) (try! sb))
 
 (println @sb)
 
