@@ -26,7 +26,7 @@
           (vary-meta update :sent-keys
             #(conj % result))))))))
 
-(defmacro until!
+(defmacro form!
   [sb result paths*]
   (let [
          steps* (map (fn [[target _ func _ needed-keys]]
@@ -40,9 +40,11 @@
                     :a 10
                     :b 42}))
 
-(until! sb :result [
-                     :sum <- + <- [:a :b]
-                     :result <- dec <- [:sum]])
+(form! sb :result [
+                    :sum <- + <- [:a :b]
+                    :result <- dec <- [:sum]])
+
+(while (@sb :result))
 
 (println @sb)
 
