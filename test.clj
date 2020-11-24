@@ -33,7 +33,7 @@
 (defmacro path
   [paths*]
   (map (fn [[target _ func _ needed-keys]]
-      [target needed-keys func])
+      (eval [target needed-keys func]))
     (partition 5 paths*)))
 
 (defn returning
