@@ -51,6 +51,10 @@
                 :result <- dec <- [:sum]
                 :done? <- (returning true println) <- [:result]]))
 
+(println pt)
+
+#_(comment
+
 (while ((complement @sb) :result)
   (try! sb pt))
 
@@ -60,5 +64,7 @@
                  :sum 52
                  :result 51
                  :done? true}))
+
+)
 
 (shutdown-agents)
