@@ -17,9 +17,9 @@
   (comp target-key :sent-keys meta deref))
 
 (defn step!
-  [sb result needed-keys func]
+  [sb result needed func]
   (let [
-        uses (map @sb needed-keys)]
+        uses (map @sb needed)]
     (when (every? identity uses)
       (when-not-> sb (key-sent? result)
         (send (fn-> (assoc result (apply func uses))
@@ -32,9 +32,8 @@
 
 (defmacro path
   [paths*]
-  (map (fn [[target _ func _ needed-keys]]
-      (eval [target needed-keys func]))
-    (partition 5 paths*)))
+  `'~(map (fn [[x _ func _ needed]] x needed func])
+      (partition 5 paths*)))
 
 (defn returning
   [return proc]
@@ -51,10 +50,6 @@
                 :result <- dec <- [:sum]
                 :done? <- (returning true println) <- [:result]]))
 
-(println pt)
-
-#_(comment
-
 (while ((complement @sb) :result)
   (try! sb pt))
 
@@ -64,7 +59,5 @@
                  :sum 52
                  :result 51
                  :done? true}))
-
-)
 
 (shutdown-agents)
