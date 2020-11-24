@@ -32,7 +32,7 @@
 
 (defmacro path
   [paths*]
-  `'~(map (fn [[x _ func _ needed]] x needed func])
+  `'~(map (fn [[x _ func _ needed]] [x needed func])
       (partition 5 paths*)))
 
 (defn returning
