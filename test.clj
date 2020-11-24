@@ -27,36 +27,38 @@
             #(conj % result))))))))
 
 (defn try!
-  [sb]
-  (map (partial apply step! sb)
-    (comp :paths meta) sb)))
+  [sb pt]
+  (map (partial apply step! sb) pt))
 
+(defmacro path
+  [paths*]
+  (map (fn [[target _ func _ needed-keys]]
+      [target needed-keys func])
+    (partition 5 paths*)))
 
-(defmacro path!
-  [sb result paths*]
-  (let [
-         steps* (map (fn [[target _ func _ needed-keys]]
-            `(step! ~sb ~target ~needed-keys ~func))
-          (partition 5 paths*))]
-    `(while ((complement (key-sent? ~result)) ~sb) ~@steps*)))
+(defn returning
+  [return proc]
+  #(do (apply proc %&) return))
 
 ;;TEST
 
 (def sb (snowball {
                     :a 10
-                    :b 42}
-                  [
-                    :sum <- + <- [:a :b]
-                    :result <- dec <- :sum]))
+                    :b 42}))
 
-(while ((complement @sb) :result) (try! sb))
+(def pt (path [
+                :sum <- + <- [:a :b]
+                :result <- dec <- [:sum]
+                :done? <- (returning true println) <- [:result]]))
 
-(println @sb)
+(while ((complement @sb) :result)
+  (try! sb pt))
 
 (assert (= @sb {
                  :a 10
                  :b 42
                  :sum 52
-                 :result 51}))
+                 :result 51
+                 :done? true}))
 
 (shutdown-agents)
