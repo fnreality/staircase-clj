@@ -51,7 +51,12 @@
                 :result <- dec <- [:sum]
                 :done? <- (returning true println) <- [:result]]))
 
-(while ((complement @sb) :result)
+(dotimes [_ 100]
+  (try! sb pt)
+  (println @sb)
+  (println (meta @sb)))
+
+#_(while ((complement @sb) :result)
   (try! sb pt))
 
 (assert (= @sb {
