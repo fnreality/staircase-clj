@@ -28,7 +28,8 @@
 
 (defn try!
   [sb pt]
-  (map (partial apply step! sb) pt))
+  (map (partial apply step! sb)
+    (first pt)))
 
 (defmacro path
   [paths*]
