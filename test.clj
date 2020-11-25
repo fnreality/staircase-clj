@@ -28,8 +28,7 @@
 
 (defn try!
   [sb pt]
-  (map (partial apply step! sb)
-    (into #{} pt)))
+  (map (partial apply step! sb) pt))
 
 (defmacro path
   [paths*]
@@ -53,7 +52,7 @@
 
 (println pt)
 
-(apply step! sb [:sum [:a :b] +])
+((partial apply step! sb) [:sum [:a :b] +]))
 
 (dotimes [_ 50]
   (try! sb pt)
