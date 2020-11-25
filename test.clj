@@ -52,7 +52,7 @@
 
 (println pt)
 
-((partial apply step! sb) [:sum [:a :b] +]))
+((partial apply step! sb) [:sum [:a :b] +])
 
 (dotimes [_ 50]
   (try! sb pt)
