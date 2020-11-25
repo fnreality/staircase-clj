@@ -50,8 +50,10 @@
                 :result <- dec <- [:sum]
                 :done? <- (returning true println) <- [:result]]))
 
-(while ((complement @sb) :result)
-  (try! sb pt))
+(dotimes [_ 1000]
+  (try! sb pt)
+  (println @sb)
+  (println (meta @sb)))
 
 (assert (= @sb {
                  :a 10
