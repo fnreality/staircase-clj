@@ -28,7 +28,8 @@
 
 (defn try!
   [sb pt]
-  (map (partial apply step! sb) pt))
+  (doall
+    (map (partial apply step! sb) pt)))
 
 (defmacro path
   [paths*]
@@ -50,14 +51,8 @@
                 :result <- dec <- [:sum]
                 :done? <- (returning true println) <- [:result]]))
 
-(println pt)
-
-((partial apply step! sb) [:sum [:a :b] +])
-
-(dotimes [_ 50]
-  (try! sb pt)
-  (println @sb)
-  (println (meta @sb)))
+(while ((complement @sb) :result)
+  (try! sb pt))
 
 (assert (= @sb {
                  :a 10
