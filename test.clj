@@ -50,7 +50,9 @@
                 :result <- dec <- [:sum]
                 :done? <- (returning true println) <- [:result]]))
 
-(dotimes [_ 1000]
+(println pt)
+
+(dotimes [_ 50]
   (try! sb pt)
   (println @sb)
   (println (meta @sb)))
