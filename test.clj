@@ -53,6 +53,10 @@
 
 (println pt)
 
+(apply step! sb
+  (first
+    (into #{} pt)))
+
 (dotimes [_ 50]
   (try! sb pt)
   (println @sb)
