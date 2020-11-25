@@ -53,9 +53,7 @@
 
 (println pt)
 
-(apply step! sb
-  (first
-    (into #{} pt)))
+(apply step! sb [:sum [:a :b] +])
 
 (dotimes [_ 50]
   (try! sb pt)
